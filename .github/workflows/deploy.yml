@@ -33,7 +33,7 @@ jobs:
     - name: Install dependencies
       run: |
         cd bias-dashboard
-        npm ci
+        npm ci --legacy-peer-deps
 
     - name: Build frontend
       run: |
