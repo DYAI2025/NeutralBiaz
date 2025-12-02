@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simplified BiazNeutralize AI Backend Server
+Simplified NeutraBiaz AI Backend Server
 """
 
 from fastapi import FastAPI, HTTPException
@@ -12,7 +12,7 @@ import time
 from datetime import datetime
 
 app = FastAPI(
-    title="BiazNeutralize AI API",
+    title="NeutraBiaz AI API",
     description="Simplified bias detection and neutralization API",
     version="1.0.0"
 )

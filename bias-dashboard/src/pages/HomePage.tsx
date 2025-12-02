@@ -40,7 +40,7 @@ const HomePage: React.FC = () => {
       {/* Hero Section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Welcome to BiasNeutralize AI
+          Welcome to NeutraBiaz
         </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
           Detect and neutralize bias in your text with advanced AI technology.

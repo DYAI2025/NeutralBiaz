@@ -33,7 +33,7 @@ const Header: React.FC = () => {
             <Link to="/" className="flex items-center space-x-2">
               <ShieldCheckIcon className="h-8 w-8 text-primary-600" />
               <span className="text-xl font-bold text-gray-900">
-                BiasNeutralize AI
+                NeutraBiaz
               </span>
             </Link>
           </div>
