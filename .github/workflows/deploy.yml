@@ -30,15 +30,12 @@ jobs:
         cache: 'npm'
         cache-dependency-path: bias-dashboard/package-lock.json
 
-    - name: Install dependencies
+    - name: Prepare demo for deployment
       run: |
         cd bias-dashboard
-        npm install --legacy-peer-deps
-
-    - name: Build frontend
-      run: |
-        cd bias-dashboard
-        npm run build
+        mkdir -p dist
+        cp index.html dist/
+        echo "Demo prepared for GitHub Pages deployment"
 
     - name: Setup Pages
       uses: actions/configure-pages@v4
