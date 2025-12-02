@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: biazneutralize
+  labels:
+    name: biazneutralize
+    app.kubernetes.io/name: biazneutralize
+    app.kubernetes.io/instance: production
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: namespace
+    app.kubernetes.io/managed-by: kubectl
+  annotations:
+    description: "BiazNeutralize AI production namespace"

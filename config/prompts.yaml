@@ -1,0 +1,285 @@
+# LLM Prompt Templates Configuration
+# This file contains the prompt templates for the bias detection and neutralization system
+
+debiaser_system:
+  role: system
+  description: System prompt for LLM debiasing assistant
+  content: |
+    Du bist ein hochpräziser Debiasing- und Rewriting-Assistent
+    in einem professionellen Anti-Bias-Analyse-Framework.
+
+    ZIELE
+    - Du bekommst:
+      - Ausgangstextpassagen (Spans) mit markierten Bias-Treffern
+      - Intersektionale Bias-Kategorien (Familie + Subtyp)
+      - Kulturkontexte (Sender- und Empfängerkultur, z. B. DE, US, JP)
+      - Zusätzliche Kontextinfos (Thema, Zielgruppe, Formalitätsgrad).
+    - Deine Aufgabe:
+      1) Du analysierst, warum die Passage problematisch oder riskant ist.
+      2) Du schlägst in der Zielsprache zwei alternative Formulierungen vor:
+         - Variante A: maximal neutral, sachlich, faktenbasiert.
+         - Variante B: emotional ähnlich, aber klar bias-reduziert.
+      3) Du achtest darauf, dass die Kernintention (Fakten, Kritik, Anliegen)
+         erhalten bleibt, solange sie nicht selbst schädlich oder illegal ist.
+
+    WICHTIGE PRINZIPIEN
+    - Du verstärkst oder erfindest keinen Bias.
+    - Du fügst keine neuen Beleidigungen, Stereotype oder Diskriminierungen hinzu.
+    - Du erfindest keine Fakten. Wenn Fakten unklar sind, bleibe allgemein.
+    - Du entfernst explizit menschenfeindliche, entwürdigende, dehumanisierende Inhalte.
+    - Wenn eine Passage so toxisch ist, dass sie nicht sinnvoll umformuliert werden kann,
+      darfst du das klar sagen und nur eine sichere Alternativform anbieten.
+
+    BIAS-KONZEPT (vereinfacht)
+    - Du arbeitest mit einer intersektionalen Bias-Taxonomie
+      (z. B. Rassismus, Sexismus, Klassismus, Ableismus, Adultismus, Ageismus,
+      Queerfeindlichkeit, Xenophobie, religiöse Diskriminierung usw.)
+      sowie feineren Subtypen (z. B. Stereotypisierung, Entmenschlichung,
+      Schuldumkehr, Victim Blaming, Gaslighting, Othering, Cultural Erasure, usw.).
+    - Du musst die genaue Taxonomie nicht neu definieren, aber du respektierst
+      die übergebenen Labels und nutzt sie bei deiner Analyse und Begründung.
+
+    KULTURKONTEXT
+    - Du berücksichtigst, dass Höflichkeitsnormen, Direktheit, Hierarchie,
+      Kollektivismus vs. Individualismus usw. je nach Kultur unterschiedlich sind.
+    - Wenn Sender- und Empfängerkultur stark differieren, markiere explizit,
+      welche Elemente für die Empfänger:in gefährlich, beschämend oder aggressiv
+      wirken könnten, und moderiere entsprechend.
+
+    RESPONSE-FORMAT
+    - Antworte immer strikt im geforderten JSON-Format.
+    - Du erzeugst keine epistemischen Präfixe wie "Faktisch korrekt...",
+      "Logisch scheint mir...", "Rein subjektiv...". Das macht ein separates
+      Self-Bias-Check-Modul nachgelagert.
+    - Schreibe deine Antworten in der Zielsprache, angegeben durch {{output_language}}.
+
+debias_span:
+  role: user
+  description: Prompt for debiasing a single text span
+  content: |
+    Du sollst eine konkrete Textpassage debiasen und zwei Alternativen formulieren.
+
+    SPRACHE UND KONTEXT
+    - Originalsprache: {{input_language}}
+    - Zielsprache der Antwort: {{output_language}}
+    - Senderkultur (Autor:in): {{sender_culture}}
+    - Empfängerkultur (Adressat:in): {{receiver_culture}}
+    - Kontext/Thema: {{context_topic}}
+    - Zielgruppe / Setting: {{audience}}
+    - Formalitätsgrad: {{formality_level}}
+
+    MARKIERTE PASSAGE
+    - Voller Originalsatz / Abschnitt:
+      """{{full_sentence_or_paragraph}}"""
+
+    - Markierter Bias-Span (die problematische Stelle):
+      """{{bias_span}}"""
+
+    BIAS-METADATEN
+    - Bias-Familie: {{bias_family}}
+    - Bias-Subtyp: {{bias_subtype}}
+    - Schweregrad (0–10) vor Kultur-Anpassung: {{severity_raw}}
+    - Schweregrad (0–10) nach Kultur-Anpassung:
+      - Senderkultur: {{severity_sender}}
+      - Empfängerkultur: {{severity_receiver}}
+    - Kurzbegründung der Cultural Engine:
+      """{{cultural_explanation}}"""
+
+    DEINE AUFGABEN
+    1) Erkläre in 1–3 Sätzen, warum die markierte Passage problematisch ist,
+       auf Basis der Bias-Familie/-Subtyp und des Kulturkontexts.
+    2) Formuliere zwei Alternativen:
+       - Variante_A: so neutral, sachlich und faktenorientiert wie möglich,
+         dabei möglichst nah an der ursprünglichen inhaltlichen Intention.
+       - Variante_B: emotional ähnlich (z. B. gleiche Empörung oder Dringlichkeit),
+         aber ohne diskriminierende oder entmenschlichende Elemente.
+    3) Wenn die ursprüngliche Intention selbst hochproblematisch oder illegal ist
+       (z. B. Aufruf zu Gewalt, Entmenschlichung), darfst du diese Intention nicht
+       beibehalten. Ersetze sie dann durch eine klare, aber menschenwürdige Kritik
+       oder lehne eine alternative Formulierung mit Begründung ab.
+
+    STILREGELN
+    - Keine neuen Beleidigungen, Stereotype oder Diskriminierungen.
+    - Keine neuen Fakten erfinden.
+    - Keine übertriebene Beschönigung; Kritik darf bestehen bleiben.
+    - Kein "Tone Policing": Du darfst Emotion ausdrücken, solange sie nicht abwertend
+      oder herabwürdigend gegenüber einer Gruppe ist.
+    - Schreibe alle Texte in {{output_language}}.
+
+    OUTPUT-FORMAT (STRICT JSON)
+    Antworte ausschließlich mit einem einzigen JSON-Objekt, ohne weitere Kommentare:
+
+    {
+      "span_id": "{{span_id}}",
+      "language": "{{output_language}}",
+      "bias_family": "{{bias_family}}",
+      "bias_subtype": "{{bias_subtype}}",
+      "analysis_explanation": "…kurze Erklärung in {{output_language}}…",
+      "can_preserve_core_intent": true,
+      "variant_A_rewrite": "…Variante A, neutral & sachlich…",
+      "variant_B_rewrite": "…Variante B, emotional aber bias-reduziert…",
+      "safety_notes": "…Hinweise, z.B. falls ursprüngliche Intention extrem toxisch war…"
+    }
+
+debias_batch:
+  role: user
+  description: Prompt for batch debiasing multiple spans
+  content: |
+    Du sollst mehrere markierte Bias-Spans in einem Dokument debiasen und jeweils zwei Alternativen formulieren.
+
+    GLOBALER KONTEXT
+    - Dokument-Sprache (Original): {{input_language}}
+    - Zielsprache der Antwort: {{output_language}}
+    - Senderkultur (Autor:in): {{sender_culture}}
+    - Empfängerkultur (Adressat:in): {{receiver_culture}}
+    - Kontext/Thema: {{context_topic}}
+    - Zielgruppe / Setting: {{audience}}
+    - Formalitätsgrad: {{formality_level}}
+
+    HIER IST DAS ORIGINALDOKUMENT (KONTEXT):
+    """{{full_document_text}}"""
+
+    HIER IST DIE LISTE DER MARKIERTEN SPANS ALS JSON-ARRAY:
+    {{spans_json}}
+
+    DEINE AUFGABEN
+    - Gehe jeden Eintrag im Array nacheinander durch.
+    - Führe die gleiche Analyse durch wie im Single-Span-Fall:
+      - 1–3 Sätze Erklärung, warum problematisch (inkl. Kulturkontext).
+      - Variante A (neutral & sachlich)
+      - Variante B (emotional, aber bias-reduziert)
+    - Überschneidungen:
+      - Wenn mehrere Spans das gleiche Bias-Motiv haben, kannst du das in den
+        "safety_notes" kurz erwähnen (z. B. „wiederholtes Othering einer Gruppe").
+
+    OUTPUT-FORMAT (STRICT JSON)
+    Antworte ausschließlich mit einem einzigen JSON-Objekt:
+
+    {
+      "language": "{{output_language}}",
+      "spans": [
+        {
+          "span_id": "s1",
+          "bias_family": "...",
+          "bias_subtype": "...",
+          "analysis_explanation": "...",
+          "can_preserve_core_intent": true,
+          "variant_A_rewrite": "...",
+          "variant_B_rewrite": "...",
+          "safety_notes": "..."
+        }
+      ]
+    }
+
+marker_generator:
+  role: user
+  description: Prompt for generating new bias markers
+  content: |
+    Du sollst neue, bias-bereinigte Marker für eine Bias-Kategorie erzeugen.
+
+    SPRACHE UND KONTEXT
+    - Zielsprache: {{output_language}}
+    - Anwendungsbereich: {{domain}}
+    - Kulturkontext (typischer Nutzerkreis): {{primary_cultures}}
+
+    BIAS-KATEGORIE
+    - Bias-Familie: {{bias_family}}
+    - Bias-Subtyp: {{bias_subtype}}
+    - Kurzbeschreibung: """{{bias_description}}"""
+
+    OPTIONALE ALTE MARKER (KÖNNEN PROBLEMATISCH SEIN)
+    - Alte Marker-Liste (falls vorhanden, ggf. mit Bias):
+      {{old_markers_json}}
+
+    Deine Aufgabe ist es,
+    - KEINE problematischen Formulierungen zu recyceln.
+    - Stattdessen neue, klar definierte Marker zu erzeugen, die helfen, problematische Muster
+      in Texten zu erkennen, ohne selbst diskriminierend zu sein.
+
+    SPEZIFIKATION FÜR JEDEN NEUEN MARKER
+    Für jeden Marker sollst du liefern:
+    - id: eine kurze, maschinenfreundliche ID (snake_case).
+    - name: ein verständlicher, menschlich lesbarer Name.
+    - description: eine präzise, aber knappe Beschreibung des Musters.
+    - rationale: warum dieser Marker wichtig ist (aus Bias- und ggf. Kulturperspektive).
+    - positive_examples: mindestens drei kurze Textbeispiele, die diesen Marker illustrieren.
+    - counter_example: ein Beispiel, das ähnliche Wörter verwendet, aber NICHT unter diesen
+      Marker fallen soll (zur Abgrenzung).
+    - severity_hint: ein Bereich, z. B. "3-5", "7-9".
+    - languages: Liste der unterstützten Sprachen, z. B. ["de", "en"].
+
+    WICHTIG
+    - In den Beispielen kannst du problematische Inhalte zeigen, aber nur so weit, wie es für
+      das Erkennen des Musters nötig ist.
+    - Erfinde keine zusätzlichen slurs oder besonders brutale Formulierungen.
+    - Nutze möglichst generische oder leicht entschärfte Formulierungen, die trotzdem klar sind.
+
+    OUTPUT-FORMAT (STRICT JSON)
+    Antworte ausschließlich mit einem einzigen JSON-Objekt:
+
+    {
+      "bias_family": "{{bias_family}}",
+      "bias_subtype": "{{bias_subtype}}",
+      "language": "{{output_language}}",
+      "markers": [
+        {
+          "id": "marker_id_1",
+          "name": "Kurzer Markername",
+          "description": "…",
+          "rationale": "…",
+          "positive_examples": [
+            "Beispiel 1 …",
+            "Beispiel 2 …",
+            "Beispiel 3 …"
+          ],
+          "counter_example": "…",
+          "severity_hint": "7-9",
+          "languages": ["de", "en"]
+        }
+      ]
+    }
+
+self_bias_check:
+  role: user
+  description: Prompt for self-bias checking with epistemic classification
+  content: |
+    Du sollst den folgenden Text auf epistemische Selbst-Bias prüfen und korrigieren.
+
+    TEXT ZUR PRÜFUNG:
+    """{{text}}"""
+
+    KONTEXT:
+    {{context}}
+
+    AUFGABEN:
+    1) Klassifiziere den Text epistemisch:
+       - "faktisch": Objektive, überprüfbare Aussagen
+       - "logisch": Rationale Schlussfolgerungen und Argumente
+       - "subjektiv": Meinungen, persönliche Einschätzungen
+
+    2) Prüfe auf Überlegenheitsgefälle (Overconfidence):
+       - Werden unsichere Aussagen als sicher präsentiert?
+       - Werden Meinungen als Fakten dargestellt?
+       - Fehlen wichtige Einschränkungen oder Unsicherheitsmarker?
+
+    3) Erkenne Bias-Indikatoren:
+       - Absolute Formulierungen ohne Belege
+       - Verallgemeinerungen
+       - Emotionale Sprache bei faktischen Aussagen
+       - Fehlende Quellenangaben bei Fakten-Claims
+
+    4) Korrigiere mit epistemischem Präfix:
+       - "Faktisch korrekt sage ich, dass..." für objektive Fakten
+       - "Logisch scheint mir, dass..." für rationale Argumente
+       - "Rein subjektiv, aus meinem Denken ergibt sich..." für Meinungen
+
+    OUTPUT-FORMAT (STRICT JSON):
+    {
+      "original_text": "...",
+      "epistemic_classification": "faktisch|logisch|subjektiv",
+      "overconfidence_detected": true/false,
+      "bias_indicators": ["...", "..."],
+      "corrected_text": "[Präfix] [korrigierter Text]",
+      "confidence_score": 0.0-1.0,
+      "explanation": "Begründung der Klassifikation und Korrektur"
+    }

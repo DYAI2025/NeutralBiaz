@@ -1,0 +1,39 @@
+# Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# HTTP Client
+httpx==0.25.2
+
+# Data Validation and Serialization
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# NLP Libraries
+spacy==3.7.2
+transformers==4.35.2
+torch==2.1.1
+numpy==1.24.3
+
+# Database and Caching
+redis==5.0.1
+aioredis==2.0.1
+
+# Utilities
+python-multipart==0.0.6
+python-dotenv==1.0.0
+python-json-logger==2.0.7
+structlog==23.2.0
+
+# Development and Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+mypy==1.7.1
+
+# Production
+gunicorn==21.2.0

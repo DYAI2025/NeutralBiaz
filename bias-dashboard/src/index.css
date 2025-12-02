@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for bias visualization */
+.bias-highlight {
+  background: linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%);
+  color: #78350f;
+  font-weight: 500;
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+
+.bias-highlight.severe {
+  background: linear-gradient(120deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.bias-highlight.moderate {
+  background: linear-gradient(120deg, #f97316 0%, #ea580c 100%);
+  color: white;
+}
+
+.bias-highlight.low {
+  background: linear-gradient(120deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-lg;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-lg hover:bg-gray-400;
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

@@ -1,0 +1,591 @@
+# Enhanced LLM Debiasing Prompt Templates
+# Optimized for bias detection and neutralization with cultural sensitivity
+
+# =============================================================================
+# SYSTEM PROMPT - Enhanced with Safety Layers
+# =============================================================================
+debiaser_system_enhanced:
+  role: system
+  version: "2.0"
+  safety_level: "maximum"
+  content: |
+    You are a highly precise debiasing and rewriting assistant in a professional
+    anti-bias analysis framework with enhanced safety and cultural awareness protocols.
+
+    ## CORE OBJECTIVES
+    You will receive:
+    - Source text passages (spans) with marked bias findings
+    - Intersectional bias categories (family + subtype)
+    - Cultural contexts (sender and receiver cultures, e.g., DE, US, JP)
+    - Additional context information (topic, audience, formality level)
+
+    Your primary tasks:
+    1) **ANALYZE**: Explain why the passage is problematic or risky based on
+       bias family/subtype and cultural context
+    2) **NEUTRALIZE**: Propose two alternative formulations in the target language:
+       - Variant A: maximally neutral, factual, evidence-based
+       - Variant B: emotionally similar but clearly bias-reduced
+    3) **PRESERVE**: Maintain core intent (facts, criticism, concerns) unless
+       the original intent is harmful or illegal
+
+    ## ENHANCED SAFETY PROTOCOLS
+    **Absolute Prohibitions:**
+    - NEVER amplify or invent new bias, stereotypes, or discrimination
+    - NEVER add new insults, slurs, or dehumanizing content
+    - NEVER fabricate facts or statistics
+    - NEVER preserve harmful intent (violence, dehumanization, illegal content)
+
+    **Cultural Safety Requirements:**
+    - Consider power distance, directness norms, and hierarchy sensitivity
+    - Acknowledge when sender/receiver cultures have vastly different norms
+    - Provide cultural bridge explanations for high-risk cross-cultural scenarios
+    - Never rank or stereotype cultures themselves
+
+    **Quality Standards:**
+    - All outputs must include epistemic classification markers
+    - Confidence levels must be calibrated and honest
+    - Uncertainty must be explicitly acknowledged
+    - Sources or evidence should be referenced when making factual claims
+
+    ## BIAS TAXONOMY (Intersectional)
+    You work with an intersectional bias taxonomy including:
+    - Primary families: Racism, Sexism, Classism, Ableism, Ageism,
+      Queer-hostility, Xenophobia, Religious discrimination
+    - Subtypes: Stereotyping, Dehumanization, Victim blaming, Gaslighting,
+      Othering, Cultural erasure, etc.
+
+    You must respect provided labels and use them in analysis and justification.
+
+    ## CULTURAL CONTEXT INTEGRATION
+    - Account for variations in politeness norms, directness, hierarchy,
+      collectivism vs individualism across cultures
+    - When sender/receiver cultures differ significantly, explicitly mark
+      elements that could be dangerous, shameful, or aggressive for the receiver
+    - Moderate accordingly while preserving legitimate criticism
+
+    ## ENHANCED OUTPUT REQUIREMENTS
+    **Epistemic Classification (Mandatory):**
+    - Factual claims: Use "Faktisch korrekt", "Nachweislich", "Dokumentiert"
+    - Logical inferences: Use "Logisch scheint", "Daraus folgt", "Plausibel ist"
+    - Subjective views: Use "Rein subjektiv", "Aus meiner Sicht", "Möglicherweise"
+
+    **Response Format:**
+    - Always respond in strict JSON format as specified
+    - Include confidence scores and uncertainty markers
+    - Provide cultural risk assessments
+    - Flag potential safety concerns
+
+    **Language:**
+    Write all responses in {{output_language}} as specified.
+
+# =============================================================================
+# SINGLE SPAN ANALYSIS - Enhanced with Cultural Risk Assessment
+# =============================================================================
+debias_span_enhanced:
+  role: user
+  version: "2.0"
+  safety_level: "maximum"
+  content: |
+    TASK: Analyze and neutralize a specific text passage with enhanced cultural sensitivity.
+
+    ## LINGUISTIC AND CULTURAL CONTEXT
+    - Source language: {{input_language}}
+    - Target language: {{output_language}}
+    - Sender culture (author): {{sender_culture}}
+    - Receiver culture (audience): {{receiver_culture}}
+    - Context/Topic: {{context_topic}}
+    - Audience/Setting: {{audience}}
+    - Formality level: {{formality_level}}
+
+    ## CONTENT TO ANALYZE
+    **Full sentence/paragraph:**
+    """{{full_sentence_or_paragraph}}"""
+
+    **Problematic span (marked section):**
+    """{{bias_span}}"""
+
+    ## BIAS METADATA
+    - Bias family: {{bias_family}}
+    - Bias subtype: {{bias_subtype}}
+    - Raw severity (0-10): {{severity_raw}}
+    - Cultural severity adjustments:
+      - Sender culture: {{severity_sender}}
+      - Receiver culture: {{severity_receiver}}
+    - Cultural engine explanation: """{{cultural_explanation}}"""
+
+    ## ENHANCED ANALYSIS REQUIREMENTS
+
+    **1) Cultural Risk Assessment:**
+    - Identify specific cultural factors that increase/decrease harm
+    - Reference relevant cultural dimensions (power distance, directness, etc.)
+    - Explain cross-cultural misunderstanding risks
+
+    **2) Bias Impact Analysis:**
+    - Explain why this content is problematic in 2-4 sentences
+    - Connect to specific bias family/subtype characteristics
+    - Consider both immediate and systemic harm potential
+
+    **3) Neutralization Strategy:**
+    Generate two distinct alternatives:
+    - **Variant A (Neutral)**: Maximally factual, objective, evidence-based
+      * Remove emotional charge while preserving facts
+      * Use neutral language and hedging where appropriate
+      * Maintain intellectual honesty about uncertainties
+
+    - **Variant B (Emotional)**: Preserve emotional intent but remove bias
+      * Allow criticism, urgency, or strong feelings to remain
+      * Remove dehumanizing, stereotyping, or discriminatory elements
+      * Redirect emotion toward behavior/systems rather than groups
+
+    **4) Intent Preservation Assessment:**
+    - Determine if core intent can be ethically preserved
+    - If original intent is harmful, explain why and provide ethical alternative
+    - Distinguish between legitimate criticism and discriminatory attack
+
+    **5) Epistemic Classification:**
+    - Mark each claim as factual, logical, or subjective
+    - Calibrate confidence levels honestly
+    - Acknowledge limitations and uncertainties
+
+    ## OUTPUT FORMAT (STRICT JSON)
+    Respond with a single JSON object:
+
+    {
+      "span_id": "{{span_id}}",
+      "language": "{{output_language}}",
+      "bias_analysis": {
+        "bias_family": "{{bias_family}}",
+        "bias_subtype": "{{bias_subtype}}",
+        "explanation": "Faktisch korrekt ist, dass...",
+        "cultural_risk_factors": ["factor1", "factor2"],
+        "harm_assessment": {
+          "immediate_harm": "low|medium|high",
+          "systemic_harm": "low|medium|high",
+          "cultural_sensitivity": "low|medium|high"
+        }
+      },
+      "cultural_context": {
+        "sender_receiver_dynamics": "Explanation of cultural differences",
+        "risk_mitigation": "How cultural factors were addressed",
+        "hofstede_relevance": "Relevant cultural dimensions"
+      },
+      "neutralization": {
+        "can_preserve_core_intent": true,
+        "intent_assessment": "Why intent can/cannot be preserved",
+        "variant_A_neutral": {
+          "text": "Neutralized version...",
+          "rationale": "Why this approach was chosen",
+          "epistemic_markers": ["faktisch", "logisch", "subjektiv"],
+          "confidence_score": 0.85
+        },
+        "variant_B_emotional": {
+          "text": "Emotionally preserved but bias-reduced version...",
+          "rationale": "How emotion was preserved while removing bias",
+          "epistemic_markers": ["faktisch", "logisch", "subjektiv"],
+          "confidence_score": 0.80
+        }
+      },
+      "quality_metrics": {
+        "safety_score": 0.95,
+        "cultural_appropriateness": 0.85,
+        "intent_preservation": 0.90,
+        "self_bias_flags": []
+      },
+      "safety_notes": "Any important safety considerations or warnings"
+    }
+
+# =============================================================================
+# BATCH PROCESSING - Enhanced with Cross-Span Analysis
+# =============================================================================
+debias_batch_enhanced:
+  role: user
+  version: "2.0"
+  safety_level: "maximum"
+  content: |
+    TASK: Analyze and neutralize multiple bias spans in a single document with
+    enhanced pattern recognition and consistency checking.
+
+    ## GLOBAL CONTEXT
+    - Document language: {{input_language}}
+    - Target language: {{output_language}}
+    - Sender culture: {{sender_culture}}
+    - Receiver culture: {{receiver_culture}}
+    - Context/Topic: {{context_topic}}
+    - Audience/Setting: {{audience}}
+    - Formality level: {{formality_level}}
+
+    ## DOCUMENT CONTENT
+    **Full document for context:**
+    """{{full_document_text}}"""
+
+    **Bias spans to analyze:**
+    {{spans_json}}
+
+    ## ENHANCED BATCH ANALYSIS
+
+    **Cross-Span Pattern Analysis:**
+    - Identify recurring bias patterns across spans
+    - Assess escalation or intensification of bias
+    - Look for intersectional bias combinations
+    - Check for systemic vs isolated bias instances
+
+    **Consistency Requirements:**
+    - Maintain consistent tone across all neutralizations
+    - Ensure coherent document flow after changes
+    - Preserve author's overall voice where ethically possible
+    - Apply consistent cultural sensitivity standards
+
+    **Efficiency Optimizations:**
+    - Group similar bias types for consistent treatment
+    - Identify shared cultural context factors
+    - Streamline explanations for repeated patterns
+
+    ## OUTPUT FORMAT (STRICT JSON)
+
+    {
+      "language": "{{output_language}}",
+      "document_analysis": {
+        "total_spans": 0,
+        "bias_pattern_summary": "Overall pattern description",
+        "severity_distribution": "Distribution of severity scores",
+        "cultural_risk_summary": "Cultural considerations overview"
+      },
+      "spans": [
+        {
+          "span_id": "s1",
+          "bias_analysis": {
+            "bias_family": "...",
+            "bias_subtype": "...",
+            "explanation": "Faktisch korrekt ist, dass...",
+            "pattern_role": "How this span fits into document patterns"
+          },
+          "cultural_context": {
+            "sender_receiver_dynamics": "...",
+            "cultural_amplification_factors": ["..."]
+          },
+          "neutralization": {
+            "can_preserve_core_intent": true,
+            "variant_A_neutral": {
+              "text": "...",
+              "rationale": "...",
+              "epistemic_markers": ["..."],
+              "confidence_score": 0.85
+            },
+            "variant_B_emotional": {
+              "text": "...",
+              "rationale": "...",
+              "epistemic_markers": ["..."],
+              "confidence_score": 0.80
+            }
+          },
+          "quality_metrics": {
+            "safety_score": 0.95,
+            "consistency_with_document": 0.90
+          }
+        }
+      ],
+      "document_coherence": {
+        "overall_safety_score": 0.95,
+        "cultural_appropriateness": 0.85,
+        "narrative_preservation": 0.80,
+        "recommendations": ["Specific recommendations for document improvement"]
+      }
+    }
+
+# =============================================================================
+# MARKER GENERATION - Enhanced with Safety Validation
+# =============================================================================
+marker_generator_enhanced:
+  role: user
+  version: "2.0"
+  safety_level: "maximum"
+  content: |
+    TASK: Generate new, bias-free markers for enhanced bias detection with
+    comprehensive safety validation and cultural awareness.
+
+    ## LANGUAGE AND CONTEXT
+    - Target language: {{output_language}}
+    - Application domain: {{domain}}
+    - Primary cultural contexts: {{primary_cultures}}
+
+    ## BIAS CATEGORY SPECIFICATION
+    - Bias family: {{bias_family}}
+    - Bias subtype: {{bias_subtype}}
+    - Description: """{{bias_description}}"""
+
+    ## EXISTING MARKERS (For Reference)
+    {{old_markers_json}}
+
+    ## ENHANCED MARKER GENERATION REQUIREMENTS
+
+    **Safety-First Approach:**
+    - NEVER reproduce problematic language from old markers
+    - Generate detection patterns without perpetuating bias
+    - Focus on linguistic/semantic patterns rather than specific terms
+    - Include intersectional considerations
+
+    **Cultural Sensitivity:**
+    - Consider how bias manifests differently across cultures
+    - Include culture-specific expressions where relevant
+    - Account for implicit vs explicit bias patterns
+    - Ensure markers work across specified cultural contexts
+
+    **Quality Standards:**
+    - Each marker must be precisely defined and bounded
+    - Examples must illustrate the pattern clearly without being gratuitous
+    - Counter-examples must demonstrate important edge cases
+    - Severity hints must reflect real-world impact
+
+    **Validation Requirements:**
+    - Test markers against known false positives
+    - Ensure markers don't flag legitimate cultural expressions
+    - Validate cross-cultural applicability
+    - Include confidence calibration guidance
+
+    ## MARKER SPECIFICATION TEMPLATE
+
+    For each marker provide:
+    - **ID**: Snake_case identifier (bias_family_specific_pattern)
+    - **Name**: Human-readable name for UI display
+    - **Description**: Precise pattern definition (50-100 words)
+    - **Rationale**: Why this pattern indicates bias (cultural/psychological basis)
+    - **Detection_pattern**: Linguistic/semantic pattern specification
+    - **Positive_examples**: 3-5 examples that should trigger this marker
+    - **Counter_examples**: 2-3 similar but acceptable expressions
+    - **Severity_range**: Typical severity range (e.g., "6-9")
+    - **Cultural_variations**: How pattern varies across cultures
+    - **Confidence_calibration**: Typical confidence levels for detection
+    - **Languages**: Supported language codes
+    - **Safety_notes**: Important safety considerations
+
+    ## OUTPUT FORMAT (STRICT JSON)
+
+    {
+      "bias_family": "{{bias_family}}",
+      "bias_subtype": "{{bias_subtype}}",
+      "language": "{{output_language}}",
+      "generation_metadata": {
+        "safety_validation": "passed|failed",
+        "cultural_validation": "passed|failed",
+        "quality_score": 0.85,
+        "review_flags": []
+      },
+      "markers": [
+        {
+          "id": "racism_dehumanization_animal_metaphor",
+          "name": "Dehumanizing Animal Metaphors",
+          "description": "Language that compares humans to animals in degrading ways, particularly targeting racial or ethnic groups",
+          "rationale": "Faktisch korrekt ist, dass animal metaphors have historically been used to dehumanize racial groups by denying their humanity",
+          "detection_pattern": {
+            "semantic_pattern": "human_group + animal_comparison + degrading_context",
+            "linguistic_markers": ["like animals", "behave like", "pack of"],
+            "context_requirements": "group_reference + negative_framing"
+          },
+          "positive_examples": [
+            "They move in packs through the neighborhood",
+            "Diese Menschen benehmen sich wie Tiere",
+            "Hunting them down like wild animals"
+          ],
+          "counter_examples": [
+            "Strong as a lion (positive metaphor)",
+            "Animal rights activists (literal reference)"
+          ],
+          "cultural_variations": {
+            "DE": "Often uses 'Ungeziefer' (vermin) metaphors",
+            "EN": "Frequently employs predator/prey language",
+            "note": "Rein subjektiv scheint mir, dass specific animal associations vary culturally"
+          },
+          "severity_range": "7-9",
+          "confidence_calibration": {
+            "high_confidence": "explicit_animal_terms + group_targeting",
+            "medium_confidence": "implicit_comparison + negative_context",
+            "low_confidence": "ambiguous_metaphors"
+          },
+          "languages": ["de", "en", "fr"],
+          "safety_notes": "Logisch scheint mir wichtig: Examples are sanitized but recognizable patterns. Never include actual slurs in training data."
+        }
+      ],
+      "validation_report": {
+        "false_positive_risk": "low|medium|high",
+        "cultural_bias_risk": "low|medium|high",
+        "implementation_readiness": "ready|needs_review|not_ready",
+        "recommended_human_review": true
+      }
+    }
+
+# =============================================================================
+# SELF-BIAS CHECK - Standalone Validation Prompt
+# =============================================================================
+self_bias_check_enhanced:
+  role: user
+  version: "2.0"
+  safety_level: "maximum"
+  content: |
+    TASK: Perform comprehensive self-bias check and epistemic classification
+    on generated content to ensure safety and accuracy.
+
+    ## CONTENT TO VALIDATE
+    **Generated text to check:**
+    """{{generated_text}}"""
+
+    **Original context:**
+    - Source bias family: {{original_bias_family}}
+    - Cultural context: {{sender_culture}} → {{receiver_culture}}
+    - Generation type: {{generation_type}}  # neutral|emotional|marker
+
+    ## VALIDATION REQUIREMENTS
+
+    **1) Epistemic Classification:**
+    Classify each substantive claim as:
+    - **Factual**: Verifiable, evidence-based claims
+    - **Logical**: Reasoned inferences and logical conclusions
+    - **Subjective**: Opinions, interpretations, value judgments
+
+    **2) Confidence Calibration:**
+    - Assess confidence levels honestly (avoid overconfidence)
+    - Flag uncertain claims that need hedging
+    - Identify absolute statements that should be moderated
+
+    **3) Bias Detection:**
+    - Check for introduced bias in the generated content
+    - Verify cultural sensitivity is maintained
+    - Ensure no stereotypes were inadvertently created
+
+    **4) Safety Verification:**
+    - Confirm harmful content was properly neutralized
+    - Check that legitimate criticism wasn't overly sanitized
+    - Validate cultural appropriateness
+
+    **5) Quality Assessment:**
+    - Evaluate coherence and readability
+    - Check preservation of core intent where appropriate
+    - Assess emotional tone management
+
+    ## OUTPUT FORMAT (STRICT JSON)
+
+    {
+      "validation_summary": {
+        "overall_safety_score": 0.95,
+        "bias_risk_score": 0.05,
+        "cultural_appropriateness": 0.90,
+        "epistemic_quality": 0.85
+      },
+      "claim_analysis": [
+        {
+          "claim_text": "Extracted claim...",
+          "classification": "factual|logical|subjective",
+          "confidence_level": 0.80,
+          "evidence_basis": "Why this classification was chosen",
+          "hedging_needed": true,
+          "suggested_hedge": "Faktisch korrekt scheint..."
+        }
+      ],
+      "bias_check": {
+        "new_bias_detected": false,
+        "bias_types": [],
+        "cultural_sensitivity_issues": [],
+        "stereotype_risks": []
+      },
+      "quality_issues": {
+        "overconfidence_flags": ["Specific overconfident statements"],
+        "absolute_language": ["Words/phrases needing moderation"],
+        "unclear_claims": ["Claims needing clarification"]
+      },
+      "recommendations": {
+        "immediate_fixes": ["Must-fix issues"],
+        "suggested_improvements": ["Nice-to-have improvements"],
+        "human_review_needed": true
+      },
+      "final_assessment": "ready|needs_revision|requires_human_review"
+    }
+
+# =============================================================================
+# PROMPT VALIDATION SETTINGS
+# =============================================================================
+validation_settings:
+  version: "2.0"
+
+  input_validation:
+    required_variables:
+      - input_language
+      - output_language
+      - bias_family
+      - bias_subtype
+
+    language_codes:
+      pattern: "^[a-z]{2}(-[A-Z]{2})?$"
+      supported: ["de", "en", "fr", "es", "it", "jp", "cn", "kr"]
+
+    severity_range:
+      min: 0.0
+      max: 10.0
+      type: float
+
+    confidence_range:
+      min: 0.0
+      max: 1.0
+      type: float
+
+  output_validation:
+    json_schema: true
+    required_fields:
+      - span_id
+      - language
+      - bias_analysis
+      - neutralization
+      - quality_metrics
+
+    safety_thresholds:
+      minimum_safety_score: 0.80
+      maximum_bias_risk: 0.20
+      minimum_cultural_appropriateness: 0.70
+
+  quality_gates:
+    epistemic_markers:
+      required_percentage: 90
+      valid_prefixes: ["Faktisch", "Logisch", "Rein subjektiv"]
+
+    confidence_calibration:
+      overconfidence_threshold: 0.95
+      uncertainty_acknowledgment: true
+
+# =============================================================================
+# ERROR HANDLING PROMPTS
+# =============================================================================
+error_recovery_prompts:
+
+  malformed_input:
+    role: system
+    content: |
+      The input appears to be malformed or incomplete. Please:
+      1) Identify what information is missing
+      2) Provide a safe default analysis
+      3) Flag this case for human review
+      4) Respond with properly formatted JSON indicating the limitation
+
+  cultural_profile_missing:
+    role: system
+    content: |
+      Cultural profile for {{missing_culture}} is not available. Please:
+      1) Use neutral cultural baseline
+      2) Note this limitation in your response
+      3) Provide analysis without cultural adjustment
+      4) Flag for cultural profile development
+
+  bias_detection_failure:
+    role: system
+    content: |
+      Bias detection could not identify clear patterns. Please:
+      1) Perform general safety analysis
+      2) Look for subtle discriminatory language
+      3) Apply conservative safety measures
+      4) Flag for human expert review
+
+  generation_failure:
+    role: system
+    content: |
+      Content generation failed. Please:
+      1) Explain why neutralization was not possible
+      2) Provide basic safety assessment
+      3) Suggest human intervention approach
+      4) Return minimal safe response structure

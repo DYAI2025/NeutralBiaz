@@ -1,0 +1,263 @@
+{
+  "bias_families": {
+    "cognitive": {
+      "id": "cognitive",
+      "name": "Cognitive Bias",
+      "description": "Systematic patterns of deviation from rationality in judgment and decision-making",
+      "weight": 1.0,
+      "subtypes": {
+        "confirmation": {
+          "id": "confirmation",
+          "name": "Confirmation Bias",
+          "description": "Tendency to search for, interpret, favor information that confirms pre-existing beliefs",
+          "severity_multiplier": 0.8,
+          "patterns": ["always", "never", "all", "none", "obviously", "clearly"]
+        },
+        "anchoring": {
+          "id": "anchoring",
+          "name": "Anchoring Bias",
+          "description": "Over-reliance on first piece of information encountered",
+          "severity_multiplier": 0.7,
+          "patterns": ["first", "initial", "originally", "at first"]
+        },
+        "availability": {
+          "id": "availability",
+          "name": "Availability Heuristic",
+          "description": "Overestimating likelihood of events with greater availability in memory",
+          "severity_multiplier": 0.6,
+          "patterns": ["I remember", "everyone knows", "common knowledge"]
+        }
+      }
+    },
+    "demographic": {
+      "id": "demographic",
+      "name": "Demographic Bias",
+      "description": "Bias based on demographic characteristics like age, gender, race, ethnicity",
+      "weight": 1.5,
+      "subtypes": {
+        "age": {
+          "id": "age",
+          "name": "Age Bias (Ageism)",
+          "description": "Discrimination based on age, particularly against older or younger individuals",
+          "severity_multiplier": 1.2,
+          "patterns": ["too old", "too young", "boomer", "millennial", "gen z", "elderly", "kids these days"]
+        },
+        "gender": {
+          "id": "gender",
+          "name": "Gender Bias",
+          "description": "Discrimination or prejudice based on gender identity or expression",
+          "severity_multiplier": 1.3,
+          "patterns": ["man up", "be a man", "like a girl", "emotional woman", "hysterical", "mansplaining"]
+        },
+        "racial": {
+          "id": "racial",
+          "name": "Racial Bias",
+          "description": "Prejudice or discrimination based on race or ethnicity",
+          "severity_multiplier": 1.5,
+          "patterns": ["typical", "all of them", "their kind", "those people", "foreign"]
+        },
+        "sexual_orientation": {
+          "id": "sexual_orientation",
+          "name": "Sexual Orientation Bias",
+          "description": "Discrimination based on sexual orientation or romantic attraction",
+          "severity_multiplier": 1.4,
+          "patterns": ["that's gay", "no homo", "lifestyle choice", "unnatural"]
+        }
+      }
+    },
+    "socioeconomic": {
+      "id": "socioeconomic",
+      "name": "Socioeconomic Bias",
+      "description": "Bias based on social class, economic status, education, or occupation",
+      "weight": 1.2,
+      "subtypes": {
+        "class": {
+          "id": "class",
+          "name": "Class Bias",
+          "description": "Prejudice based on perceived social or economic class",
+          "severity_multiplier": 1.0,
+          "patterns": ["poor people", "rich snobs", "trailer trash", "upper class", "welfare"]
+        },
+        "education": {
+          "id": "education",
+          "name": "Educational Bias",
+          "description": "Discrimination based on educational background or perceived intelligence",
+          "severity_multiplier": 0.9,
+          "patterns": ["uneducated", "ignorant", "dumb", "illiterate", "elite", "ivory tower"]
+        },
+        "occupation": {
+          "id": "occupation",
+          "name": "Occupational Bias",
+          "description": "Prejudice based on job or profession",
+          "severity_multiplier": 0.8,
+          "patterns": ["just a", "lowly", "blue collar", "service worker", "menial"]
+        }
+      }
+    },
+    "cultural": {
+      "id": "cultural",
+      "name": "Cultural Bias",
+      "description": "Bias based on cultural background, nationality, or religious beliefs",
+      "weight": 1.3,
+      "subtypes": {
+        "nationality": {
+          "id": "nationality",
+          "name": "Nationality Bias",
+          "description": "Prejudice based on country of origin or nationality",
+          "severity_multiplier": 1.2,
+          "patterns": ["foreigners", "immigrants", "aliens", "outsiders", "not from here"]
+        },
+        "religious": {
+          "id": "religious",
+          "name": "Religious Bias",
+          "description": "Discrimination based on religious beliefs or practices",
+          "severity_multiplier": 1.3,
+          "patterns": ["infidel", "heathen", "godless", "fanatic", "extremist"]
+        },
+        "linguistic": {
+          "id": "linguistic",
+          "name": "Linguistic Bias",
+          "description": "Prejudice based on language, accent, or communication style",
+          "severity_multiplier": 1.0,
+          "patterns": ["can't speak properly", "broken english", "accent", "foreign language"]
+        }
+      }
+    },
+    "physical": {
+      "id": "physical",
+      "name": "Physical Bias",
+      "description": "Bias based on physical characteristics, appearance, or abilities",
+      "weight": 1.2,
+      "subtypes": {
+        "appearance": {
+          "id": "appearance",
+          "name": "Appearance Bias",
+          "description": "Discrimination based on physical appearance or attractiveness",
+          "severity_multiplier": 0.9,
+          "patterns": ["ugly", "fat", "skinny", "short", "tall", "unattractive"]
+        },
+        "disability": {
+          "id": "disability",
+          "name": "Disability Bias",
+          "description": "Prejudice against people with physical, mental, or cognitive disabilities",
+          "severity_multiplier": 1.4,
+          "patterns": ["retarded", "crippled", "disabled", "handicapped", "special needs"]
+        },
+        "health": {
+          "id": "health",
+          "name": "Health Status Bias",
+          "description": "Discrimination based on health conditions or medical status",
+          "severity_multiplier": 1.1,
+          "patterns": ["sick", "diseased", "contagious", "unhealthy"]
+        }
+      }
+    },
+    "institutional": {
+      "id": "institutional",
+      "name": "Institutional Bias",
+      "description": "Systematic bias embedded in institutions, policies, or procedures",
+      "weight": 1.4,
+      "subtypes": {
+        "systemic": {
+          "id": "systemic",
+          "name": "Systemic Bias",
+          "description": "Bias embedded in systems and structures",
+          "severity_multiplier": 1.3,
+          "patterns": ["the system", "establishment", "institutional"]
+        },
+        "algorithmic": {
+          "id": "algorithmic",
+          "name": "Algorithmic Bias",
+          "description": "Bias in automated decision-making systems",
+          "severity_multiplier": 1.2,
+          "patterns": ["algorithm", "AI", "automated", "machine learning"]
+        }
+      }
+    },
+    "temporal": {
+      "id": "temporal",
+      "name": "Temporal Bias",
+      "description": "Bias related to time periods, historical contexts, or generational differences",
+      "weight": 0.9,
+      "subtypes": {
+        "historical": {
+          "id": "historical",
+          "name": "Historical Bias",
+          "description": "Bias in interpreting or presenting historical events",
+          "severity_multiplier": 0.8,
+          "patterns": ["back then", "the good old days", "in the past"]
+        },
+        "generational": {
+          "id": "generational",
+          "name": "Generational Bias",
+          "description": "Prejudice based on generational cohort membership",
+          "severity_multiplier": 0.7,
+          "patterns": ["your generation", "these kids", "older generation"]
+        }
+      }
+    },
+    "ideological": {
+      "id": "ideological",
+      "name": "Ideological Bias",
+      "description": "Bias based on political beliefs, worldviews, or value systems",
+      "weight": 1.1,
+      "subtypes": {
+        "political": {
+          "id": "political",
+          "name": "Political Bias",
+          "description": "Prejudice based on political affiliation or beliefs",
+          "severity_multiplier": 1.0,
+          "patterns": ["liberal", "conservative", "leftist", "right-wing", "extremist"]
+        },
+        "moral": {
+          "id": "moral",
+          "name": "Moral Bias",
+          "description": "Bias based on moral or ethical frameworks",
+          "severity_multiplier": 0.9,
+          "patterns": ["immoral", "unethical", "wrong", "evil", "sinful"]
+        }
+      }
+    },
+    "intersectional": {
+      "id": "intersectional",
+      "name": "Intersectional Bias",
+      "description": "Bias arising from overlapping and interconnecting social identities",
+      "weight": 1.6,
+      "subtypes": {
+        "multiple_identity": {
+          "id": "multiple_identity",
+          "name": "Multiple Identity Bias",
+          "description": "Bias affecting individuals with multiple marginalized identities",
+          "severity_multiplier": 1.5,
+          "patterns": ["double discrimination", "multiple burden", "compound bias"]
+        },
+        "identity_erasure": {
+          "id": "identity_erasure",
+          "name": "Identity Erasure",
+          "description": "Ignoring or denying aspects of intersectional identities",
+          "severity_multiplier": 1.3,
+          "patterns": ["color blind", "don't see", "we're all the same"]
+        }
+      }
+    }
+  },
+  "intersectional_combinations": [
+    ["demographic.racial", "demographic.gender"],
+    ["demographic.gender", "socioeconomic.class"],
+    ["cultural.religious", "demographic.racial"],
+    ["physical.disability", "demographic.age"],
+    ["socioeconomic.education", "cultural.nationality"]
+  ],
+  "severity_thresholds": {
+    "low": 0.3,
+    "medium": 0.6,
+    "high": 0.8,
+    "critical": 0.95
+  },
+  "confidence_thresholds": {
+    "uncertain": 0.4,
+    "likely": 0.6,
+    "confident": 0.8,
+    "certain": 0.95
+  }
+}

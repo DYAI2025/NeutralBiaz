@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  bias-engine:
+    build:
+      context: ./bias-engine
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - ENVIRONMENT=development
+    volumes:
+      - ./bias-engine:/app
+      - ./config:/app/config
+    depends_on:
+      - redis
+    command: uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload
+
+  bias-dashboard:
+    build:
+      context: ./bias-dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./bias-dashboard:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    command: npm run dev
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
