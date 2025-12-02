@@ -34,8 +34,8 @@ jobs:
       run: |
         cd bias-dashboard
         mkdir -p dist
-        cp index.html dist/
-        echo "Demo prepared for GitHub Pages deployment"
+        cp demo.html dist/index.html
+        echo "Interactive demo prepared for GitHub Pages deployment"
 
     - name: Setup Pages
       uses: actions/configure-pages@v4
