@@ -26,14 +26,14 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
         cache-dependency-path: bias-dashboard/package-lock.json
 
     - name: Install dependencies
       run: |
         cd bias-dashboard
-        npm ci --legacy-peer-deps
+        npm install --legacy-peer-deps
 
     - name: Build frontend
       run: |
