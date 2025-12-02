@@ -1,1 +1,28 @@
-import React from 'react';\n\ninterface LoadingSpinnerProps {\n  size?: 'sm' | 'md' | 'lg';\n  className?: string;\n  text?: string;\n}\n\nconst LoadingSpinner: React.FC<LoadingSpinnerProps> = ({\n  size = 'md',\n  className = '',\n  text\n}) => {\n  const sizeClasses = {\n    sm: 'w-4 h-4',\n    md: 'w-6 h-6',\n    lg: 'w-8 h-8'\n  };\n\n  return (\n    <div className={`flex items-center justify-center space-x-2 ${className}`}>\n      <div\n        className={`animate-spin border-2 border-primary-500 border-t-transparent rounded-full ${\n          sizeClasses[size]\n        }`}\n      ></div>\n      {text && (\n        <span className=\"text-sm text-gray-600\">{text}</span>\n      )}\n    </div>\n  );\n};\n\nexport default LoadingSpinner;
+import React from "react";
+
+interface LoadingSpinnerProps {
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}
+
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  size = "md",
+  className = ""
+}) => {
+  const sizeClasses = {
+    sm: "w-4 h-4",
+    md: "w-8 h-8",
+    lg: "w-12 h-12"
+  };
+
+  return (
+    <div className={`flex justify-center items-center ${className}`}>
+      <div
+        className={`animate-spin rounded-full border-2 border-gray-300 border-t-blue-600 ${sizeClasses[size]}`}
+      >
+      </div>
+    </div>
+  );
+};
+
+export default LoadingSpinner;
